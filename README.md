@@ -1,59 +1,40 @@
-# Scalabilità  e Resilienza in Kubernetes: come le app Cloud-Native si auto adattano al carico e rinascono dalle ceneri
+# Farezero Demo e Talks
 
-## Premessa
+Questo repository è un monorepo atto a collezionare (in opportune sottocartelle) il materiale di talk e demo del gruppo Farezero.
 
-## Cosa faremo
+## Aggiunta del materiale
 
-## Creazione del cluster
-
-
-## Installazione del `metrics-server`
-
-Installiamo il metrics-server, indispensabile per il funzionamento dell'horizontal pod autoscaler:
+Per aggiungere il materiale relativo ad un talk si puo' fare:
 ```bash
-~  $ k apply -f metrics-server.yaml
+~/talks-and-demos (⌥ anybranch) git fetch -tpf
+~/talks-and-demos (⌥ main) git checkout main
+~/talks-and-demos (⌥ main) git pull
+~/talks-and-demos (⌥ main) mkdir argomento_del_talk
 ```
-
-## Installazione dei componenti
-
-Installiamo tutti i componenti:
+Dopo aver copiato all'interno tutti i contenuti (slides in pdf, cartelle, codice sorgente, Dockerfile, docker-compose.yaml, .gitignore .dockerignore specifici, ecc.) provvedere a fare push:
 ```bash
-~  $ k apply -f php-apache.yaml
+~/talks-and-demos (⌥ main) git add .
+~/talks-and-demos (⌥ main) git commit -s -m "add argomento_del_talk"
+~/talks-and-demos (⌥ main) git push origin main
 ```
+## Struttura del repo
 
-## Test del `horizontal-pod-autoscaler`
-
-Osserviamo (su due terminali diversi) in tempo reale i pod e l'horizontalpodautoscaler:
+In tal modo, la struttura del repo sarà simile a:
 ```bash
-# terminale 1
-~  $ k get pods --watch
-# terminale 2
-~  $ k get hpa --watch
+~/talks-and-demos (⌥ main) tree
+.
+├── LICENSE
+├── README.md
+├── docker_k8s_demo
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── docker-k8s-demo-slides.pdf
+│   ├── go.mod
+│   ├── main.go
+│   └── serverinfo-deployment.yaml
+└── k8s_autoscaling_linuxday_2024
+    ├── README.md
+    ├── metrics-server.yaml
+    ├── php-apache.yaml
+    └── slides.pdf
 ```
-Poi avviamo il carico scegliendo uno dei seguenti modi:
-
-Utilizzando l'IP del Loadbalancer (se avviato tramite il Cloud Provider):
-```bash
-~  $ LB_IP=$(k get svc/php-apache-svc -o jsonpath={.status.loadBalancer.ingress[0].ip})
-~  $ while sleep 0.01; do curl http://$LB_IP:80>/dev/null; done
-```
-utilizzando il `kubectl port-forward`:
-```bash
-~  $ k port-forward svc/php-apache-svc 8888:80
-# su un altro terminale
-~  $ while sleep 0.01; do curl http://localhost:8888>/dev/null; done 
-```
-
-utilizzando un pod nel cluster creato ad-hoc per effettuare le chiamate alla nostra app:
-```bash
-kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache-svc; done"
-```
-
-## Test di recovery
-
-Proviamo ad cancellare il pod
-```bash
-~  $ k delete pods/...
-```
-... il replicaset
-
