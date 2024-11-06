@@ -7,8 +7,8 @@ Questo repository è un monorepo atto a collezionare (in opportune sottocartelle
 Per aggiungere il materiale relativo ad un talk si puo' fare:
 ```bash
 ~/talks-and-demos (⌥ anybranch) git fetch -tpf
-~/talks-and-demos (⌥ main) git checkout main
-~/talks-and-demos (⌥ main) git pull
+~/talks-and-demos (⌥ anybranch) git checkout main
+~/talks-and-demos (⌥ main) git pull --rebase
 ~/talks-and-demos (⌥ main) mkdir argomento_del_talk
 ```
 Dopo aver copiato all'interno tutti i contenuti (slides in pdf, cartelle, codice sorgente, Dockerfile, docker-compose.yaml, .gitignore .dockerignore specifici, ecc.) provvedere a fare push:
@@ -17,6 +17,9 @@ Dopo aver copiato all'interno tutti i contenuti (slides in pdf, cartelle, codice
 ~/talks-and-demos (⌥ main) git commit -s -m "add argomento_del_talk"
 ~/talks-and-demos (⌥ main) git push origin main
 ```
+Essendo le cartelle tutte separate, possiamo fare push direttamente su `main` (trunk-based development). 
+Nel caso in cui si voglia contribuire al codice o ai contenuti di proprietà di un'altra persona, invece, è consigliabile utilizzare un altro branch ed aprire una Pull Request verso il branch `main` chiedendo la revisione alla persona interessata.
+
 ## Struttura del repo
 
 In tal modo, la struttura del repo sarà simile a:
