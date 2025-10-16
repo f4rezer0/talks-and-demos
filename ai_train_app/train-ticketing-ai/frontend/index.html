@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Italian Train Booking - AI Demo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚄 Italian Train Booking System</h1>
+            <p class="subtitle">Compare Traditional vs AI-Powered Booking</p>
+        </header>
+
+        <div class="split-view">
+            <!-- Traditional Booking Form -->
+            <div class="panel traditional-panel">
+                <h2>🎫 Traditional Booking</h2>
+
+                <form id="searchForm" class="booking-form">
+                    <div class="form-group">
+                        <label for="origin">From:</label>
+                        <select id="origin" name="origin" required>
+                            <option value="">Select departure station</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destination">To:</label>
+                        <select id="destination" name="destination" required>
+                            <option value="">Select arrival station</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Time Preference:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="time_preference" value="any" checked> Any Time</label>
+                            <label><input type="radio" name="time_preference" value="morning"> Morning (6-12)</label>
+                            <label><input type="radio" name="time_preference" value="afternoon"> Afternoon (12-18)</label>
+                            <label><input type="radio" name="time_preference" value="evening"> Evening (18-24)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adults">Adults:</label>
+                            <input type="number" id="adults" name="adults" value="1" min="0" max="9">
+                        </div>
+                        <div class="form-group">
+                            <label for="seniors">Seniors (65+):</label>
+                            <input type="number" id="seniors" name="seniors" value="0" min="0" max="9">
+                        </div>
+                        <div class="form-group">
+                            <label for="children">Children (4-17):</label>
+                            <input type="number" id="children" name="children" value="0" min="0" max="9">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="hasWifi" name="hasWifi"> WiFi Required
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="hasFood" name="hasFood"> Food Service Required
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Search Trains</button>
+                </form>
+
+                <div id="searchResults" class="results-container">
+                    <!-- Results will be inserted here -->
+                </div>
+            </div>
+
+            <!-- AI Chat Interface -->
+            <div class="panel ai-panel">
+                <h2>🤖 AI Assistant</h2>
+
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="message assistant-message">
+                            <div class="message-content">
+                                <p>Hello! I'm your AI booking assistant. I can help you find and book train tickets.</p>
+                                <p>Try saying something like:</p>
+                                <ul>
+                                    <li>"I need to go from Milan to Rome tomorrow morning"</li>
+                                    <li>"Show me trains from Venice to Florence next week"</li>
+                                    <li>"Book 2 tickets on the 7:30 train"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <textarea
+                            id="chatInput"
+                            placeholder="Type your message here..."
+                            rows="2"
+                        ></textarea>
+                        <button id="sendButton" class="btn btn-ai">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Complete Your Booking</h3>
+            <form id="bookingForm">
+                <div id="passengerInputs"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBooking">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>✅ Booking Confirmed!</h3>
+            <div id="confirmationDetails"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" id="closeConfirmation">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/traditional.js"></script>
+    <script src="/js/ai_chat.js"></script>
+</body>
+</html>
