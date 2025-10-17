@@ -7,75 +7,82 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">🇬🇧 English</option>
+            <option value="it">🇮🇹 Italiano</option>
+        </select>
+    </div>
+
     <div class="container">
         <header>
             <h1>🚄 Frecciarossa</h1>
-            <p class="subtitle">Book Your Train Tickets</p>
+            <p class="subtitle" data-i18n="subtitle">Book Your Train Tickets</p>
         </header>
 
         <div class="single-view">
             <!-- Traditional Booking Form -->
             <div id="traditionalPanel" class="panel traditional-panel">
                 <div class="panel-header">
-                    <h2>🎫 Traditional Booking</h2>
-                    <button id="switchToAI" class="btn btn-toggle">🤖 AI Assistant</button>
+                    <h2 data-i18n="traditional_booking">🎫 Traditional Booking</h2>
+                    <button id="switchToAI" class="btn btn-toggle" data-i18n="ai_assistant">🤖 AI Assistant</button>
                 </div>
 
                 <form id="searchForm" class="booking-form">
                     <div class="form-group">
-                        <label for="origin">From:</label>
+                        <label for="origin" data-i18n="from">From:</label>
                         <select id="origin" name="origin" required>
-                            <option value="">Select departure station</option>
+                            <option value="" data-i18n="select_departure">Select departure station</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="destination">To:</label>
+                        <label for="destination" data-i18n="to">To:</label>
                         <select id="destination" name="destination" required>
-                            <option value="">Select arrival station</option>
+                            <option value="" data-i18n="select_arrival">Select arrival station</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="date">Date:</label>
+                        <label for="date" data-i18n="date">Date:</label>
                         <input type="date" id="date" name="date" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Time Preference:</label>
+                        <label data-i18n="time_preference">Time Preference:</label>
                         <div class="radio-group">
-                            <label><input type="radio" name="time_preference" value="any" checked> Any Time</label>
-                            <label><input type="radio" name="time_preference" value="morning"> Morning (6-12)</label>
-                            <label><input type="radio" name="time_preference" value="afternoon"> Afternoon (12-18)</label>
-                            <label><input type="radio" name="time_preference" value="evening"> Evening (18-24)</label>
+                            <label><input type="radio" name="time_preference" value="any" checked> <span data-i18n="any_time">Any Time</span></label>
+                            <label><input type="radio" name="time_preference" value="morning"> <span data-i18n="morning">Morning (6-12)</span></label>
+                            <label><input type="radio" name="time_preference" value="afternoon"> <span data-i18n="afternoon">Afternoon (12-18)</span></label>
+                            <label><input type="radio" name="time_preference" value="evening"> <span data-i18n="evening">Evening (18-24)</span></label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="adults">Adults:</label>
+                            <label for="adults" data-i18n="adults">Adults:</label>
                             <input type="number" id="adults" name="adults" value="1" min="0" max="9">
                         </div>
                         <div class="form-group">
-                            <label for="seniors">Seniors (65+):</label>
+                            <label for="seniors" data-i18n="seniors">Seniors (65+):</label>
                             <input type="number" id="seniors" name="seniors" value="0" min="0" max="9">
                         </div>
                         <div class="form-group">
-                            <label for="children">Children (4-17):</label>
+                            <label for="children" data-i18n="children">Children (4-17):</label>
                             <input type="number" id="children" name="children" value="0" min="0" max="9">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" id="hasWifi" name="hasWifi"> WiFi Required
+                            <input type="checkbox" id="hasWifi" name="hasWifi"> <span data-i18n="wifi_required">WiFi Required</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" id="hasFood" name="hasFood"> Food Service Required
+                            <input type="checkbox" id="hasFood" name="hasFood"> <span data-i18n="food_required">Food Service Required</span>
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Search Trains</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="search_trains">Search Trains</button>
                 </form>
 
                 <div id="searchResults" class="results-container">
@@ -86,20 +93,20 @@
             <!-- AI Chat Interface -->
             <div id="aiPanel" class="panel ai-panel" style="display: none;">
                 <div class="panel-header">
-                    <h2>🤖 AI Assistant</h2>
-                    <button id="switchToTraditional" class="btn btn-toggle">🎫 Traditional Booking</button>
+                    <h2 data-i18n="ai_assistant">🤖 AI Assistant</h2>
+                    <button id="switchToTraditional" class="btn btn-toggle" data-i18n="traditional_booking">🎫 Traditional Booking</button>
                 </div>
 
                 <div class="chat-container">
                     <div id="chatMessages" class="chat-messages">
                         <div class="message assistant-message">
                             <div class="message-content">
-                                <p>Hello! I'm your AI booking assistant. I can help you find and book train tickets.</p>
-                                <p>Try saying something like:</p>
+                                <p data-i18n="ai_greeting">Hello! I'm your AI booking assistant. I can help you find and book train tickets.</p>
+                                <p data-i18n="ai_try_saying">Try saying something like:</p>
                                 <ul>
-                                    <li>"I need to go from Milan to Rome tomorrow morning"</li>
-                                    <li>"Show me trains from Venice to Florence next week"</li>
-                                    <li>"Book 2 tickets on the 7:30 train"</li>
+                                    <li data-i18n="ai_example_1">"I need to go from Milan to Rome tomorrow morning"</li>
+                                    <li data-i18n="ai_example_2">"Show me trains from Venice to Florence next week"</li>
+                                    <li data-i18n="ai_example_3">"Book 2 tickets on the 7:30 train"</li>
                                 </ul>
                             </div>
                         </div>
@@ -108,10 +115,11 @@
                     <div class="chat-input-container">
                         <textarea
                             id="chatInput"
+                            data-i18n-placeholder="chat_placeholder"
                             placeholder="Type your message here..."
                             rows="2"
                         ></textarea>
-                        <button id="sendButton" class="btn btn-ai">Send</button>
+                        <button id="sendButton" class="btn btn-ai" data-i18n="send">Send</button>
                     </div>
                 </div>
             </div>
@@ -122,12 +130,12 @@
     <div id="bookingModal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
-            <h3>Complete Your Booking</h3>
+            <h3 data-i18n="complete_booking">Complete Your Booking</h3>
             <form id="bookingForm">
                 <div id="passengerInputs"></div>
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelBooking">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBooking" data-i18n="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="confirm_booking">Confirm Booking</button>
                 </div>
             </form>
         </div>
@@ -137,10 +145,10 @@
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
-            <h3>✅ Booking Confirmed!</h3>
+            <h3 data-i18n="booking_confirmed">✅ Booking Confirmed!</h3>
             <div id="confirmationDetails"></div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-primary" id="closeConfirmation">Close</button>
+                <button type="button" class="btn btn-primary" id="closeConfirmation" data-i18n="close">Close</button>
             </div>
         </div>
     </div>
@@ -148,9 +156,10 @@
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
-        <p>Loading...</p>
+        <p data-i18n="loading">Loading...</p>
     </div>
 
+    <script src="/js/i18n.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/traditional.js"></script>
     <script src="/js/ai_chat.js"></script>

@@ -28,6 +28,37 @@ body {
     min-height: 100vh;
 }
 
+/* Language Selector */
+.language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+}
+
+.language-selector select {
+    padding: 8px 12px;
+    border: 2px solid white;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+}
+
+.language-selector select:hover {
+    background: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.language-selector select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
