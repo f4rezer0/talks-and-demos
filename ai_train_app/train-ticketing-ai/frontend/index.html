@@ -10,13 +10,16 @@
     <div class="container">
         <header>
             <h1>🚄 Frecciarossa</h1>
-            <p class="subtitle">Compare Traditional vs AI-Powered Booking</p>
+            <p class="subtitle">Book Your Train Tickets</p>
         </header>
 
-        <div class="split-view">
+        <div class="single-view">
             <!-- Traditional Booking Form -->
-            <div class="panel traditional-panel">
-                <h2>🎫 Traditional Booking</h2>
+            <div id="traditionalPanel" class="panel traditional-panel">
+                <div class="panel-header">
+                    <h2>🎫 Traditional Booking</h2>
+                    <button id="switchToAI" class="btn btn-toggle">🤖 AI Assistant</button>
+                </div>
 
                 <form id="searchForm" class="booking-form">
                     <div class="form-group">
@@ -81,8 +84,11 @@
             </div>
 
             <!-- AI Chat Interface -->
-            <div class="panel ai-panel">
-                <h2>🤖 AI Assistant</h2>
+            <div id="aiPanel" class="panel ai-panel" style="display: none;">
+                <div class="panel-header">
+                    <h2>🤖 AI Assistant</h2>
+                    <button id="switchToTraditional" class="btn btn-toggle">🎫 Traditional Booking</button>
+                </div>
 
                 <div class="chat-container">
                     <div id="chatMessages" class="chat-messages">
@@ -148,5 +154,6 @@
     <script src="/js/app.js"></script>
     <script src="/js/traditional.js"></script>
     <script src="/js/ai_chat.js"></script>
+    <script src="/js/toggle.js"></script>
 </body>
 </html>
