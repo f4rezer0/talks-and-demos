@@ -187,6 +187,12 @@ function initiateBooking(schedule, passengerInfo) {
 async function handleBookingSubmit(e) {
     e.preventDefault();
 
+    // Check if we're in AI booking mode
+    if (window.isAIBookingMode) {
+        // Delegate to AI booking handler
+        return handleAIBookingSubmitFromTraditional(e);
+    }
+
     if (!selectedSchedule) {
         window.app.showAlert('No schedule selected', 'error');
         return;
@@ -248,5 +254,121 @@ async function handleBookingSubmit(e) {
         window.app.showAlert(error.message, 'error');
     } finally {
         window.app.showLoading(false);
+    }
+}
+
+// Handle AI booking submission from traditional form
+async function handleAIBookingSubmitFromTraditional(e) {
+    e.preventDefault();
+
+    console.log('AI Booking: Form submitted');
+
+    const count = parseInt(document.getElementById('aiPassengerCount')?.value) || 1;
+    const date = document.getElementById('aiBookingDate')?.value;
+    const context = window.aiBookingContext;
+
+    console.log('AI Booking: Count:', count, 'Date:', date, 'Context:', context);
+
+    if (!context) {
+        console.error('AI Booking: No context found!');
+        if (window.addMessageToChat) {
+            window.addMessageToChat('assistant', 'Booking context not found. Please try selecting a train again.');
+        }
+        return;
+    }
+
+    if (!date) {
+        console.error('AI Booking: No date selected!');
+        if (window.addMessageToChat) {
+            window.addMessageToChat('assistant', 'Please select a travel date.');
+        }
+        return;
+    }
+
+    // Collect passenger data
+    const passengers = [];
+    for (let i = 0; i < count; i++) {
+        const name = document.getElementById(`aiPassengerName${i}`)?.value;
+        const type = document.getElementById(`aiPassengerType${i}`)?.value;
+
+        if (!name || !name.trim()) {
+            console.error(`AI Booking: Passenger ${i+1} name is empty!`);
+            if (window.addMessageToChat) {
+                window.addMessageToChat('assistant', `Please enter name for passenger ${i+1}.`);
+            }
+            return;
+        }
+
+        passengers.push({
+            name: name.trim(),
+            passenger_type: type || 'adult'
+        });
+    }
+
+    console.log('AI Booking: Collected passengers:', passengers);
+
+    // Close modal
+    document.getElementById('bookingModal').classList.remove('show');
+    window.isAIBookingMode = false;
+
+    // Show loading
+    window.app.showLoading();
+
+    try {
+        console.log('AI Booking: Starting booking process');
+        console.log('AI Booking: Context:', context);
+        console.log('AI Booking: Passengers:', passengers);
+        console.log('AI Booking: Date:', date);
+
+        // Call booking API directly (not through AI)
+        const response = await fetch(`${window.app.API_BASE}/bookings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                schedule_id: parseInt(context.scheduleId),
+                date: date,
+                passengers: passengers
+            })
+        });
+
+        console.log('AI Booking: Response status:', response.status);
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.error('AI Booking: Response not OK:', error);
+            throw new Error(error.message || 'Booking failed');
+        }
+
+        const result = await response.json();
+        console.log('AI Booking: Full result:', result);
+
+        if (!result.success) {
+            console.error('AI Booking: Success=false:', result.message);
+            throw new Error(result.message);
+        }
+
+        const booking = result.booking;
+        console.log('AI Booking: Extracted booking:', booking);
+
+        window.app.showLoading(false);
+
+        // Show confirmation using the same modal as traditional booking
+        console.log('AI Booking: Calling showBookingConfirmation with:', booking);
+        window.app.showBookingConfirmation(booking);
+
+        // Also add a message to the AI chat
+        if (window.addMessageToChat) {
+            window.addMessageToChat('user', `Booked ${count} ticket(s) for ${date} from ${context.origin} to ${context.destination}`);
+            window.addMessageToChat('assistant', `✅ Your booking has been confirmed! Your booking reference is: ${booking.booking_ref}`);
+        }
+
+    } catch (error) {
+        console.error('AI Booking error:', error);
+        window.app.showLoading(false);
+        if (window.addMessageToChat) {
+            window.addMessageToChat('assistant', `Sorry, there was an error creating your booking: ${error.message}`);
+        }
     }
 }

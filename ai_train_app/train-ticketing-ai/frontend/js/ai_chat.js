@@ -110,6 +110,9 @@ function addMessageToChat(role, message, data = null) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+// Export addMessageToChat to global scope
+window.addMessageToChat = addMessageToChat;
+
 // Show typing indicator
 function showTypingIndicator() {
     const chatMessages = document.getElementById('chatMessages');
@@ -204,12 +207,34 @@ function displayAITrainResults(trains) {
                 <div style="margin-top: 10px; font-size: 0.875rem; color: var(--text-gray);">
                     Schedule ID: ${schedule.id}
                 </div>
+                <button class="btn btn-primary book-train-btn"
+                    data-schedule-id="${schedule.id}"
+                    data-origin="${schedule.origin.name}"
+                    data-destination="${schedule.destination.name}"
+                    data-departure="${result.departure_time}"
+                    style="width: 100%; margin-top: 10px;">
+                    Book This Train
+                </button>
             </div>
         `;
     });
 
     html += '</div>';
     contentDiv.innerHTML = html;
+
+    // Add event listeners to all book buttons
+    setTimeout(() => {
+        const bookButtons = contentDiv.querySelectorAll('.book-train-btn');
+        bookButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const scheduleId = this.getAttribute('data-schedule-id');
+                const origin = this.getAttribute('data-origin');
+                const destination = this.getAttribute('data-destination');
+                const departure = this.getAttribute('data-departure');
+                window.bookTrainFromAI(scheduleId, origin, destination, departure);
+            });
+        });
+    }, 0);
 
     messageDiv.appendChild(contentDiv);
     chatMessages.appendChild(messageDiv);
@@ -348,3 +373,112 @@ window.clearChat = function() {
     chatSessionId = window.app.generateUUID();
     console.log('New chat session:', chatSessionId);
 };
+
+// Flag to track if we're in AI booking mode
+window.isAIBookingMode = false;
+
+// Book train from AI chat - use modal form like traditional booking
+window.bookTrainFromAI = function(scheduleId, origin, destination, departureTime) {
+    console.log('Booking train from AI:', scheduleId);
+
+    // Store booking context
+    window.aiBookingContext = {
+        scheduleId: scheduleId,
+        origin: origin,
+        destination: destination,
+        departureTime: departureTime
+    };
+
+    // Set AI booking mode flag
+    window.isAIBookingMode = true;
+
+    // Open the booking modal with a simple form
+    showAIBookingModal();
+};
+
+// Show AI booking modal
+function showAIBookingModal() {
+    const modal = document.getElementById('bookingModal');
+    const passengerInputs = document.getElementById('passengerInputs');
+
+    // Create simple passenger input form
+    passengerInputs.innerHTML = `
+        <div class="form-group">
+            <label for="aiPassengerCount">Number of Passengers:</label>
+            <input type="number" id="aiPassengerCount" value="1" min="1" max="9" class="form-control">
+        </div>
+        <div id="aiPassengerDetails"></div>
+        <div class="form-group">
+            <label for="aiBookingDate">Travel Date:</label>
+            <input type="date" id="aiBookingDate" class="form-control" required>
+        </div>
+    `;
+
+    // Set default date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('aiBookingDate').value = tomorrow.toISOString().split('T')[0];
+
+    // Generate passenger fields
+    updateAIPassengerFields();
+
+    // Listen for passenger count changes
+    document.getElementById('aiPassengerCount').addEventListener('change', updateAIPassengerFields);
+
+    modal.classList.add('show');
+
+    // Set up close handlers for AI booking
+    const closeBtn = modal.querySelector('.modal-close');
+    const cancelBtn = modal.querySelector('#cancelBooking');
+
+    const closeModal = () => {
+        modal.classList.remove('show');
+        window.isAIBookingMode = false;
+    };
+
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
+
+    if (cancelBtn) {
+        cancelBtn.onclick = closeModal;
+    }
+
+    // Close on outside click
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    };
+}
+
+// Update passenger input fields
+function updateAIPassengerFields() {
+    const count = parseInt(document.getElementById('aiPassengerCount').value) || 1;
+    const container = document.getElementById('aiPassengerDetails');
+
+    let html = '<h4 style="margin-top: 20px;">Passenger Details:</h4>';
+
+    for (let i = 0; i < count; i++) {
+        html += `
+            <div class="passenger-group" style="border: 1px solid var(--border-color); padding: 15px; margin: 10px 0; border-radius: 8px;">
+                <h5>Passenger ${i + 1}</h5>
+                <div class="form-group">
+                    <label for="aiPassengerName${i}">Full Name:</label>
+                    <input type="text" id="aiPassengerName${i}" class="form-control" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="aiPassengerType${i}">Type:</label>
+                    <select id="aiPassengerType${i}" class="form-control">
+                        <option value="adult">Adult</option>
+                        <option value="senior">Senior (65+)</option>
+                        <option value="child">Child (4-17)</option>
+                        <option value="infant">Infant (0-3)</option>
+                    </select>
+                </div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+}
