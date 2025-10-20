@@ -7,8 +7,8 @@ A complete train ticket booking system built with Go backend, PostgreSQL databas
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         Frontend                            │
+┌───────────────────────────────────────────────────────────┐
+│                         Frontend                          │
 │  ┌──────────────────┐         ┌──────────────────┐        │
 │  │  Traditional     │         │   AI Chat        │        │
 │  │  Booking Form    │         │   Interface      │        │
@@ -17,12 +17,12 @@ A complete train ticket booking system built with Go backend, PostgreSQL databas
                      │                 │
                      ▼                 ▼
           ┌──────────────────────────────────────┐
-          │         Go Backend (Gin)              │
-          │  - REST API                           │
-          │  - Train Search Service               │
-          │  - Booking Service                    │
-          │  - AI Integration Service             │
-          └──────────┬───────────────┬────────────┘
+          │         Go Backend (Gin)             │
+          │  - REST API                          │
+          │  - Train Search Service              │
+          │  - Booking Service                   │
+          │  - AI Integration Service            │
+          └──────────┬───────────────┬───────────┘
                      │               │
                      ▼               ▼
           ┌─────────────────┐  ┌──────────────┐
