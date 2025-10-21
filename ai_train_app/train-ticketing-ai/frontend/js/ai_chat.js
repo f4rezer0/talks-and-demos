@@ -69,14 +69,35 @@ async function handleSendMessage() {
         // Hide typing indicator
         hideTypingIndicator();
 
-        // Add AI response to chat
-        if (result.message) {
-            addMessageToChat('assistant', result.message, result.data);
-        }
-
         // Handle function call results with special formatting
         if (result.function_call && result.data) {
             handleFunctionCallDisplay(result.function_call, result.data);
+        } else if (result.message) {
+            // Check if message contains JSON - if so, don't display it
+            const trimmedMessage = result.message.trim();
+
+            // Check if the message contains a JSON object anywhere
+            const containsJSON = trimmedMessage.includes('{"name":') ||
+                                 trimmedMessage.includes('{name:') ||
+                                 (trimmedMessage.startsWith('{') && trimmedMessage.includes('"parameters"'));
+
+            if (containsJSON) {
+                console.log('Detected JSON in message, filtering out');
+                // Extract any text before the JSON
+                const jsonStartIdx = trimmedMessage.indexOf('{');
+                const textBeforeJSON = jsonStartIdx > 0 ? trimmedMessage.substring(0, jsonStartIdx).trim() : '';
+
+                if (textBeforeJSON && textBeforeJSON.length > 0) {
+                    // Show only the text before JSON
+                    addMessageToChat('assistant', textBeforeJSON, result.data);
+                } else {
+                    // No text before JSON, show generic processing message
+                    addMessageToChat('assistant', 'Sto elaborando la tua richiesta...');
+                }
+            } else {
+                // Normal message, display it
+                addMessageToChat('assistant', result.message, result.data);
+            }
         }
 
     } catch (error) {
@@ -156,6 +177,9 @@ function handleFunctionCallDisplay(functionCall, data) {
     } else if (functionName === 'create_booking' && data) {
         // Display booking confirmation
         displayAIBookingConfirmation(data);
+    } else if (functionName === 'book_train_direct' && data && data.booking) {
+        // Display booking confirmation for direct booking
+        displayAIBookingConfirmation(data.booking);
     } else if (functionName === 'get_booking_details' && data) {
         // Display booking details
         displayAIBookingDetails(data);
