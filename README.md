@@ -11,6 +11,7 @@ Per aggiungere il materiale relativo ad un talk si puo' fare:
 ~/talks-and-demos (⌥ main) git pull --rebase
 ~/talks-and-demos (⌥ main) mkdir argomento_del_talk
 ```
+Per i talk del Linux Day usare invece `linux_day_AAAA/argomento_del_talk` (vedi ad esempio [linux_day_2026](linux_day_2026/README.md)).
 Dopo aver copiato all'interno tutti i contenuti (slides in pdf, cartelle, codice sorgente, Dockerfile, docker-compose.yaml, .gitignore .dockerignore specifici, ecc.) provvedere a fare push:
 ```bash
 ~/talks-and-demos (⌥ main) git add .
@@ -35,9 +36,16 @@ In tal modo, la struttura del repo sarà simile a:
 │   ├── go.mod
 │   ├── main.go
 │   └── serverinfo-deployment.yaml
-└── k8s_autoscaling_linuxday_2024
+├── linux_day_2024
+│   └── k8s_autoscaling
+│       ├── README.md
+│       ├── metrics-server.yaml
+│       ├── php-apache.yaml
+│       └── slides.pdf
+└── linux_day_2026
     ├── README.md
-    ├── metrics-server.yaml
-    ├── php-apache.yaml
-    └── slides.pdf
+    └── argomento_del_talk
+        └── ...
 ```
+
+I materiali presentati al Linux Day sono raccolti in una cartella per edizione (`linux_day_AAAA`), con una sottocartella per ogni intervento.
