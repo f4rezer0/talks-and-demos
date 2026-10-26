@@ -21,6 +21,18 @@ Dopo aver copiato all'interno tutti i contenuti (slides in pdf, cartelle, codice
 Essendo le cartelle tutte separate, possiamo fare push direttamente su `main` (trunk-based development). 
 Nel caso in cui si voglia contribuire al codice o ai contenuti di proprietà di un'altra persona, invece, è consigliabile utilizzare un altro branch ed aprire una Pull Request verso il branch `main` chiedendo la revisione alla persona interessata.
 
+### Se non fai parte dell'organizzazione
+
+Il repository è pubblico, ma solo i membri dell'organizzazione GitHub `f4rezer0` possono fare push. Se non sei tra loro, usa un fork:
+
+1. Fai il fork di questo repository dal pulsante "Fork" in alto a destra.
+2. Aggiungi sul tuo fork la cartella del talk, come descritto sopra.
+3. Apri una Pull Request verso il branch `main` di questo repository.
+
+Un membro dell'organizzazione revisiona e integra la Pull Request.
+
+Se non hai dimestichezza con git puoi fare tutto dal browser: entra nella cartella `linux_day_AAAA`, scegli "Add file" e poi "Upload files". GitHub crea il fork e ti propone di aprire la Pull Request. In alternativa mandaci le slide in PDF e le carichiamo noi.
+
 ## Struttura del repo
 
 In tal modo, la struttura del repo sarà simile a:
